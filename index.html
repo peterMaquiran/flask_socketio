@@ -10,8 +10,8 @@ $(document).ready(function() {
 	// this is the connection bieng done with js
 	// the only solution is by susing this frame work
 	// my ip adress 192.168.1.108
-	var socket = io.connect('http://127.0.0.1:5000');
-    var socket_message = io('http://127.0.0.1:5000/messages')
+	var socket = io.connect('http://192.168.1.126:5000');
+    var socket_message = io('http://192.168.1.126:5000/messages')
 
     $("#send").on('click', function(){
         var message = $("#mwssage").val();
@@ -27,7 +27,7 @@ $(document).ready(function() {
         alert(msg);
     });
 
-    var private_socket = io("http://127.0.0.1:5000/private");
+    var private_socket = io("http://192.168.1.126:5000/private");
     $('#send_username').on('click',function(){
         private_socket.emit('username', $('#username').val());
     });
