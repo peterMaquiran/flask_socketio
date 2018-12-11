@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>Chat Room</title>
+<script type="text/javascript" src="socket.io.min.js"></script>
+<script type="text/javascript" src="jquery3.2.1.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+$(document).ready(function() {
+	// this is the connection bieng done with js
+	// the only solution is by susing this frame work
+	// my ip adress 192.168.1.108
+	var socket = io.connect('http://127.0.0.1:5000');
+    var socket_message = io('http://127.0.0.1:5000/messages')
+
+    $("#send").on('click', function(){
+        var message = $("#mwssage").val();
+
+        socket_message.emit('message from user', message)
+    });
+
+    socket_message.on("from flask", function(msg){
+        alert(msg);
+    });
+
+    socket.on('server orginated', function(msg){
+        alert(msg);
+    });
+
+    var private_socket = io("http://127.0.0.1:5000/private");
+    $('#send_username').on('click',function(){
+        private_socket.emit('username', $('#username').val());
+    });
+
+    $("#send_private_message").on('click',function(){
+        var recipient = $('#send_to_username').val();
+        var message_to_send = $('#private_message').val();
+
+        private_socket.emit('private_message',{'username':recipient, 'message': message_to_send});
+    });
+
+    private_socket.on('new_private_message', function(msg){
+        alert(msg);
+    });
+
+    socket.on('connect', function() {
+        //socket.emit('my event', {data: 'I\'m connected!'});
+        console.log('connection establish');
+    });
+
+});
+</script> 
+
+<input type="text" id="message">
+<button id="send">Send</button>
+
+<input type="text" id="username">
+<button id="send_username">Send Username</button>
+<br>
+<br>
+<br>
+
+Send To: <input type="text" id="send_to_username">
+Message: <input type="text" id="private_message">
+<button id="send_private_message">Send</button>
+</body>
+</html>
